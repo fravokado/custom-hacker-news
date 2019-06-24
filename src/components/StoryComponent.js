@@ -7,6 +7,8 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CommentTreeComponent from "./CommentTreeComponent";
 import { fetchCommentsTree } from "../modules/api";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import IconUp from "@material-ui/icons/ArrowUpward";
 
 
 const useStyles = makeStyles(theme => ({
@@ -25,39 +27,59 @@ const useStyles = makeStyles(theme => ({
     },
     panelDetails: {
         display: "block"
+    },
+    titleContainer: {
+        display: "flex"
     }
 }));
 
-const fetchComments = (event, expanded, commentIds, setComments) => {
+const fetchComments = (event, expanded, commentIds, setComments, setLoading) => {
     if (expanded) {
-        fetchCommentsTree(commentIds).then(comments => setComments(comments));
+        setLoading(true);
+        fetchCommentsTree(commentIds).then((comments) => {
+            setComments(comments);
+            setLoading(false);
+        });
     }
 };
+
+const handleUpvote = (event) => {
+    window.alert("To be implemented!");
+} 
 
 export default function StoryComponent(props) {
     const { number, story } = props;
     const [comments, setComments] = useState({});
+    const [loading, setLoading] = useState(false);
     const classes = useStyles();
 
     let commentsSection = null;
     if (story.kids && story.kids.length > 0) {
+
+        let expansionDetails;
+        if (loading) {
+            expansionDetails = <CircularProgress color="secondary" />
+        } else {
+            expansionDetails = <CommentTreeComponent
+                firstLevelIds={story.kids}
+                comments={comments}
+            />
+        }
+
         commentsSection =
-            <ExpansionPanel 
+            <ExpansionPanel
                 className={classes.panel}
-                onChange={(event, expanded) => fetchComments(event, expanded, story.kids, setComments)}
+                onChange={(event, expanded) => fetchComments(event, expanded, story.kids, setComments, setLoading)}
             >
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography className={classes.heading}>Comments: {story.kids.length}</Typography>
+                    <Typography variant="body2">Comments: {story.kids.length}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.panelDetails}>
-                    <CommentTreeComponent
-                        firstLevelIds={story.kids}
-                        comments={comments}
-                    />
+                    {expansionDetails}
                 </ExpansionPanelDetails>
             </ExpansionPanel>
     }
@@ -65,11 +87,14 @@ export default function StoryComponent(props) {
     return (
         <Paper className={classes.root}>
             <Typography variant="caption">
-                Score {story.score} | by: {story.by} | <a href={story.url} target="_blank">source</a>
+                Score {story.score} | by: {story.by} | <a href={story.url} rel="noopener noreferrer" target="_blank">source</a>
             </Typography>
-            <Typography>
-                {number}. {story.title}
-            </Typography>
+            <div className={classes.titleContainer}>
+                <IconUp onClick={handleUpvote} />
+                <Typography>
+                    {number}. {story.title}
+                </Typography>
+            </div>
             {commentsSection}
         </Paper>
     );
