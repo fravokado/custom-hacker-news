@@ -97,7 +97,6 @@ export default function PersistentDrawerLeft() {
     }
 
     const handleMenuClick = (key) => {
-        console.log("CLICK", key);
         setStoryType(key);
     }
 

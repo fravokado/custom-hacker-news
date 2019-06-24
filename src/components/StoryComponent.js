@@ -45,7 +45,7 @@ const fetchComments = (event, expanded, commentIds, setComments, setLoading) => 
 
 const handleUpvote = (event) => {
     window.alert("To be implemented!");
-} 
+}
 
 export default function StoryComponent(props) {
     const { number, story } = props;
@@ -76,7 +76,7 @@ export default function StoryComponent(props) {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography variant="body2">Comments: {story.kids.length}</Typography>
+                    <Typography variant="caption">Comments: {story.kids.length}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.panelDetails}>
                     {expansionDetails}
@@ -91,7 +91,7 @@ export default function StoryComponent(props) {
             </Typography>
             <div className={classes.titleContainer}>
                 <IconUp onClick={handleUpvote} />
-                <Typography>
+                <Typography variant="subtitle2">
                     {number}. {story.title}
                 </Typography>
             </div>

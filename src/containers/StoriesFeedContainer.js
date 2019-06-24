@@ -23,7 +23,7 @@ export default class StoriesFeedContainer extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.storyType !== prevProps.storyType) {
-            this.setState({loading: true});
+            this.setState({ loading: true });
             fetchStoriesTree(this.props.storyType).then((tree) => {
                 this.setState({
                     ...tree,

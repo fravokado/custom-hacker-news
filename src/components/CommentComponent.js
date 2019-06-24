@@ -37,12 +37,12 @@ export default function CommentComponent(props) {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                <Typography variant="body2">
-                    {comment.text}
-                    <br />
-                    <br />
-                    Replies: {comment.kids.length}
-                </Typography>
+                    <Typography variant="caption">
+                        {comment.text}
+                        <br />
+                        <br />
+                        Replies: {comment.kids.length}
+                    </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.panelDetails}>
                     <CommentTreeComponent
@@ -54,7 +54,7 @@ export default function CommentComponent(props) {
     } else {
         render =
             <Paper className={classes.paper}>
-                <Typography className={classes.heading}>{comment.text}</Typography>
+                <Typography variant="caption">{comment.text}</Typography>
             </Paper>
     }
 
